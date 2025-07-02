@@ -57,10 +57,7 @@ async function getTrivia(amount, category, difficulty) {
 function mostrarPreguntas(preguntas) {
     console.clear(); 
     preguntas.forEach((pregunta, index) => {
-        console.log(`Pregunta ${index + 1}:`);
-        console.log(decodeHTMLEntities(pregunta.question));
-        console.log("Opciones:");
-
+        decodeHTMLEntities(pregunta.question);
         let opciones = [];
 
         if (pregunta.type === "boolean") {
@@ -71,10 +68,10 @@ function mostrarPreguntas(preguntas) {
         }
 
         opciones.forEach((opcion, i) => {
-            console.log(`  ${String.fromCharCode(65 + i)}. ${decodeHTMLEntities(opcion)}`);
+            decodeHTMLEntities(opcion);
         });
 
-        console.log(`Respuesta correcta: ${decodeHTMLEntities(pregunta.correct_answer)}\n`);
+        decodeHTMLEntities(pregunta.correct_answer);
     });
 }
 
@@ -91,4 +88,12 @@ function mezclarArray(array) {
         [copia[i], copia[j]] = [copia[j], copia[i]];
     }
     return copia;
+}
+
+function mostrarLoader() {
+    document.getElementById('loader').classList.remove('hidden');
+}
+
+function ocultarLoader() {
+    document.getElementById('loader').classList.add('hidden');
 }

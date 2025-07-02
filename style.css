@@ -98,3 +98,29 @@ button:hover {
     transform: translate(2px, 2px);
     box-shadow: 3px 3px 0 #a01010;
 }
+
+.loader {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #fff8c0;
+    border: 3px solid #e02020;
+    color: #e02020;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    box-shadow: 3px 3px 0 #d8a028;
+    z-index: 999;
+    text-shadow: 1px 1px 0 #fff;
+    animation: blink 1s step-start 0s infinite;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
