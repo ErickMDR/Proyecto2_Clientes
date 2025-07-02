@@ -1,3 +1,13 @@
+let preguntasActual = [];
+let preguntaNum = 0;
+let puntaje = 0;
+let correctas = 0;
+let incorrectas = 0;
+let nombreJugador = '';
+let tiempoRestante = 20;
+let intervalo;
+let tiempos = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
 
@@ -54,27 +64,6 @@ async function getTrivia(amount, category, difficulty) {
     return data;
 }
 
-function mostrarPreguntas(preguntas) {
-    console.clear(); 
-    preguntas.forEach((pregunta, index) => {
-        decodeHTMLEntities(pregunta.question);
-        let opciones = [];
-
-        if (pregunta.type === "boolean") {
-            opciones = ["True", "False"];
-        } else if (pregunta.type === "multiple") {
-            opciones = [...pregunta.incorrect_answers, pregunta.correct_answer];
-            opciones = mezclarArray(opciones);
-        }
-
-        opciones.forEach((opcion, i) => {
-            decodeHTMLEntities(opcion);
-        });
-
-        decodeHTMLEntities(pregunta.correct_answer);
-    });
-}
-
 function decodeHTMLEntities(text) {
     const textarea = document.createElement("textarea");
     textarea.innerHTML = text;
@@ -96,4 +85,62 @@ function mostrarLoader() {
 
 function ocultarLoader() {
     document.getElementById('loader').classList.add('hidden');
+}
+
+function mostrarPreguntas(preguntas) {
+    document.querySelector('.container').classList.add('hidden');
+    document.getElementById('juego').classList.remove('hidden');
+
+    preguntasActual = preguntas.map(p => {
+        const opciones = mezclarArray([...p.incorrect_answers, p.correct_answer]);
+        return {
+            pregunta: decodeHTMLEntities(p.question),
+            opciones: opciones.map(op => decodeHTMLEntities(op)),
+            correcta: decodeHTMLEntities(p.correct_answer)
+        };
+    });
+
+    nombreJugador = document.getElementById('nombre').value.trim();
+    mostrarSiguientePregunta();
+}
+
+function mostrarSiguientePregunta() {
+    const pregunta = preguntasActual[preguntaNum];
+    const juegoDiv = document.getElementById('juego');
+    juegoDiv.innerHTML = `
+        <div class="game-header">
+            <span>Pregunta ${preguntaNum + 1} de ${preguntasActual.length}</span>
+            <span class="timer" id="temporizador">Tiempo: 20s</span>
+        </div>
+        <div class="pregunta">${pregunta.pregunta}</div>
+        <div class="opciones">
+            ${pregunta.opciones.map(opcion => `<button>${opcion}</button>`).join('')}
+        </div>
+        <div class="scoreboard">
+            <span>Puntos: ${puntaje}</span>
+        </div>
+    `;
+
+    tiempoRestante = 20;
+    actualizarTempo();
+    intervalo = setInterval(actualizarTempo, 1000);
+
+    document.querySelectorAll('.opciones button').forEach(boton => {
+        boton.addEventListener('click', () => responder(boton, pregunta.correcta));
+    });
+}
+
+function actualizarTempo() {
+    const timer = document.getElementById('temporizador');
+    tiempoRestante--;
+    if (tiempoRestante <= 5) {
+        timer.classList.add('urgente');
+    }
+    timer.textContent = `Tiempo: ${tiempoRestante}s`;
+
+    if (tiempoRestante <= 0) {
+        clearInterval(intervalo);
+        tiempos.push(20);
+        mostrarRespuesta(null);
+    }
 }
