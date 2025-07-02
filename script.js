@@ -7,6 +7,7 @@ let nombreJugador = '';
 let tiempoRestante = 20;
 let intervalo;
 let tiempos = [];
+let configuracionActual = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
@@ -24,6 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        configuracionActual = {
+            nombre,
+            cantidad,
+            categoria,
+            dificultad
+        };
         mostrarLoader();
 
         try {
@@ -100,7 +107,7 @@ function mostrarPreguntas(preguntas) {
         };
     });
 
-    nombreJugador = document.getElementById('nombre').value.trim();
+    nombreJugador = configuracionActual.nombre;
     mostrarSiguientePregunta();
 }
 
@@ -221,4 +228,48 @@ function mostrarResultados() {
             <button onclick="finalizarJuego()">Finalizar</button>
         </div>
     `;
+}
+
+function reiniciarJuego() {
+    if (!configuracionActual || !configuracionActual.nombre) {
+        return location.reload();
+    }
+
+    resetStats();
+    mostrarLoader();
+
+    getTrivia(configuracionActual.cantidad, configuracionActual.categoria, configuracionActual.dificultad)
+        .then(data => {
+            mostrarPreguntas(data.results);
+        })
+        .catch(error => {
+            console.error('Error reiniciando el juego:', error);
+            alert("No se pudo reiniciar el juego. Intenta nuevamente.");
+        })
+        .finally(() => {
+            ocultarLoader();
+        });   
+    document.getElementById('resultados').classList.add('hidden'); 
+}
+
+function cambiarConfiguracion() {
+    document.getElementById('resultados').classList.add('hidden');
+    document.querySelector('.container').classList.remove('hidden');
+    resetStats();
+}
+
+function finalizarJuego() {
+    document.body.innerHTML = `
+        <div class="Despedida">
+            ¡Gracias por jugar!
+        </div>
+    `;
+}
+
+function resetStats() {
+    preguntaNum = 0;
+    puntaje = 0;
+    correctas = 0;
+    incorrectas = 0;
+    tiempos = [];
 }
