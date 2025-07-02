@@ -105,6 +105,11 @@ function mostrarPreguntas(preguntas) {
 }
 
 function mostrarSiguientePregunta() {
+    if (preguntaNum >= preguntasActual.length) {
+        mostrarResultados();
+        return;
+    }
+
     const pregunta = preguntasActual[preguntaNum];
     const juegoDiv = document.getElementById('juego');
     juegoDiv.innerHTML = `
@@ -143,4 +148,77 @@ function actualizarTempo() {
         tiempos.push(20);
         mostrarRespuesta(null);
     }
+}
+
+function responder(boton, respuestaCorrecta) {
+    clearInterval(intervalo);
+    const respuesta = boton.textContent;
+    const correcta = respuesta === respuestaCorrecta;
+    const botones = document.querySelectorAll('.opciones button');
+
+    botones.forEach(b => {
+        b.disabled = true;
+        if (b.textContent === respuestaCorrecta) b.classList.add('correcta');
+        else if (b === boton) b.classList.add('incorrecta');
+    });
+
+    if (correcta) {
+        puntaje += 10;
+        correctas++;
+    } else {
+        incorrectas++;
+    }
+
+    tiempos.push(20 - tiempoRestante);
+
+    setTimeout(() => {
+        preguntaNum++;
+        mostrarSiguientePregunta();
+    }, 2000);
+}
+
+function mostrarRespuesta(respuesta) {
+    const pregunta = preguntasActual[preguntaNum];
+    const botones = document.querySelectorAll('.opciones button');
+
+    botones.forEach(b => {
+        b.disabled = true;
+        if (b.textContent === pregunta.correcta) {
+            b.classList.add('correcta');
+        } else {
+            b.classList.add('incorrecta');
+        }
+    });
+
+    incorrectas++;
+
+    setTimeout(() => {
+        preguntaNum++;
+        mostrarSiguientePregunta();
+    }, 2000);
+}
+
+function mostrarResultados() {
+    document.getElementById('juego').classList.add('hidden');
+    const div = document.getElementById('resultados');
+    div.classList.remove('hidden');
+
+    const total = preguntasActual.length;
+    const porcentaje = ((correctas / total) * 100).toFixed(1);
+    const promedioTiempo = (tiempos.reduce((a, b) => a + b, 0) / total).toFixed(1);
+
+    div.innerHTML = `
+        <h2>¡Juego Terminado!</h2>
+        <div class="resumen">
+            <p><strong>Jugador:</strong> ${nombreJugador}</p>
+            <p><strong>Puntaje total:</strong> ${puntaje}</p>
+            <p><strong>Correctas:</strong> ${correctas}</p>
+            <p><strong>Incorrectas:</strong> ${incorrectas}</p>
+            <p><strong>Acierto:</strong> ${porcentaje}%</p>
+            <p><strong>Tiempo promedio:</strong> ${promedioTiempo}s</p>
+            <button onclick="reiniciarJuego()">Nuevo juego</button>
+            <button onclick="cambiarConfiguracion()">Cambiar configuración</button>
+            <button onclick="finalizarJuego()">Finalizar</button>
+        </div>
+    `;
 }
