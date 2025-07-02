@@ -148,6 +148,15 @@ button:hover {
     text-shadow: 1px 1px 0 #fff;
 }
 
+.pregunta {
+    font-size: 1rem;
+    margin: 20px 0;
+    color: #000;
+    text-align: center;
+    line-height: 1.6;
+    padding: 10px 5px;
+}
+
 .opciones {
     display: grid;
     gap: 10px;
@@ -160,6 +169,7 @@ button:hover {
     cursor: pointer;
     font-size: 0.8rem;
     box-shadow: 3px 3px 0 #a01010;
+    line-height: 1.6;
 }
 
 .opciones button.correcta {
@@ -186,4 +196,41 @@ button:hover {
 @keyframes parpadeo {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+}
+
+.resultados-screen h2 {
+    color: #e02020;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+}
+
+.resultados-screen .resumen p {
+    text-align: center;
+    color: #000;
+    margin: 10px 0;
+    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.resultados-screen button {
+    display: block;
+    width: 90%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 12px 16px;
+    font-size: 1rem;
+    background-color: #e02020;
+    color: white;
+    border: none;
+    box-shadow: 4px 4px 0 #a01010;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    text-align: center;
+}
+
+.resultados-screen button:hover {
+    background-color: #ff3030;
+    transform: translateY(2px);
 }
