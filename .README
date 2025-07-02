@@ -1,0 +1,52 @@
+# Trivia Web
+
+Realizado por: Erick Díaz. C.I. 29.963.164
+Materia: Clientes Web - 2025B
+
+## Descripción del Proyecto
+
+¡Una divertida trivia con estilo retro pixelado para poner a prueba tus conocimientos! Este proyecto te permite seleccionar preguntas por dificultad, cantidad y categoría. Las preguntas se obtienen en tiempo real desde la [Open Trivia Database](https://opentdb.com/).
+
+Esta es una aplicación web que simula un juego de trivia interactivo utilizando únicamente HTML, CSS y JavaScript. Las preguntas se obtienen en tiempo real desde la [Open Trivia Database](https://opentdb.com/) y gestiona la experiencia completa del usuario con temporizadores y puntuación. 
+
+## Funcionalidades
+
+- Formulario de configuración inicial: nombre del jugador, cantidad de preguntas, dificultad y categoría.
+- Carga dinámica de preguntas desde API externa.
+- Cronómetro para responder cada pregunta.
+- Retroalimentación visual inmediata (correcta / incorrecta).
+- Resultados detallados al finalizar: nombre del jugador, puntaje, aciertos, errores, porcentaje de aciertos y tiempo promedio.
+- Incluye opciones de nuevo juego, reinicio de juego con la misma configuración y finalizar la aplicación.
+
+---
+
+## Tecnologías usadas
+
+- **HTML**
+- **CSS**
+- **JavaScript**
+- **Open Trivia Database API**
+
+---
+
+## Estructura del proyecto
+
+proyecto2
+├── index.html
+├── style.css
+├── script.js
+├── assets/
+│ └── Bloque.png
+
+---
+
+## ⚙️ Cómo ejecutar el proyecto
+
+1. Clona este repositorio:
+
+   ```bash
+   git clone https://github.com/ErickMDR/Proyecto2_Clientes.git
+
+2. Abre index.html en tu navegador.
+
+3. Configura tu juego y comienza a responder.
