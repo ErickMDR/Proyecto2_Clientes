@@ -118,12 +118,6 @@ button:hover {
     display: none !important;
 }
 
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
-
 .game-screen, .resultados-screen {
     background: #ffefe7;
     border: 4px solid #e02020;
@@ -182,22 +176,6 @@ button:hover {
     color: white;
 }
 
-.timer {
-    font-size: 1rem;
-    text-align: center;
-    color: #e02020;
-}
-
-.timer.urgente {
-    animation: parpadeo 1s infinite;
-    color: red;
-}
-
-@keyframes parpadeo {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
-
 .resultados-screen h2 {
     color: #e02020;
     text-align: center;
@@ -246,4 +224,45 @@ button:hover {
     text-align: center;
     font-size: 1.4rem;
     color: #e02020;
+}
+
+.progress-container {
+    width: 100%;
+    height: 20px;
+    background-color: #ffefe7;
+    border: 3px solid #e02020;
+    box-shadow: 3px 3px 0 #d8a028;
+    margin: 10px 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 100%;
+    transition: width 1s linear;
+}
+
+.progress-bar.urgente {
+    background-color: #e02020;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+}
+
+.timer-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+#timeText {
+    font-size: 0.8rem;
+    color: #e02020;
+    text-shadow: 1px 1px 0 #fff;
+    min-width: 30px;
+    text-align: right;
 }

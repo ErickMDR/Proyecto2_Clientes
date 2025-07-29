@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dificultad = document.getElementById('dificultad').value;
 
         if (!nombre) {
-            alert("Por favor, ingresa un nombre válido.");
+            alert("Please enter a valid name.");
             return;
         }
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarPreguntas(trivia.results);
         } catch (error) {
             console.error('Error obteniendo la trivia:', error);
-            alert("Ocurrió un error al obtener la trivia. Intenta nuevamente.");
+            alert("An error occurred while fetching the trivia. Please try again.");
         } finally {
             ocultarLoader(); 
         }
@@ -59,13 +59,13 @@ async function getTrivia(amount, category, difficulty) {
     const response = await fetch(url);
 
     if (!response.ok) {
-        throw new Error("La respuesta de la API no fue exitosa");
+        throw new Error("The API response was not successful");
     }
 
     const data = await response.json();
 
     if (data.response_code !== 0) {
-        throw new Error("La API no devolvió preguntas válidas");
+        throw new Error("The API did not return valid questions");
     }
 
     return data;
@@ -120,16 +120,21 @@ function mostrarSiguientePregunta() {
     const pregunta = preguntasActual[preguntaNum];
     const juegoDiv = document.getElementById('juego');
     juegoDiv.innerHTML = `
-        <div class="game-header">
-            <span>Pregunta ${preguntaNum + 1} de ${preguntasActual.length}</span>
-            <span class="timer" id="temporizador">Tiempo: 20s</span>
+         <div class="game-header">
+            <span>Question ${preguntaNum + 1} of ${preguntasActual.length}</span>
+            <div class="timer-container">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <span id="timeText">20s</span>
+            </div>
         </div>
         <div class="pregunta">${pregunta.pregunta}</div>
         <div class="opciones">
             ${pregunta.opciones.map(opcion => `<button>${opcion}</button>`).join('')}
         </div>
         <div class="scoreboard">
-            <span>Puntos: ${puntaje}</span>
+            <span>Points: ${puntaje}</span>
         </div>
     `;
 
@@ -143,12 +148,19 @@ function mostrarSiguientePregunta() {
 }
 
 function actualizarTempo() {
-    const timer = document.getElementById('temporizador');
+    const progressBar = document.getElementById('progressBar');
+    const timeText = document.getElementById('timeText');
+
     tiempoRestante--;
+    const percentage = (tiempoRestante / 20) * 100;
+    progressBar.style.width = `${percentage}%`;
+    timeText.textContent = `${tiempoRestante}s`;
+
     if (tiempoRestante <= 5) {
-        timer.classList.add('urgente');
+        progressBar.classList.add('urgente');
+    } else {
+        progressBar.classList.remove('urgente');
     }
-    timer.textContent = `Tiempo: ${tiempoRestante}s`;
 
     if (tiempoRestante <= 0) {
         clearInterval(intervalo);
@@ -215,17 +227,17 @@ function mostrarResultados() {
     const promedioTiempo = (tiempos.reduce((a, b) => a + b, 0) / total).toFixed(1);
 
     div.innerHTML = `
-        <h2>¡Juego Terminado!</h2>
+        <h2>¡Finished!</h2>
         <div class="resumen">
-            <p><strong>Jugador:</strong> ${nombreJugador}</p>
-            <p><strong>Puntaje total:</strong> ${puntaje}</p>
-            <p><strong>Correctas:</strong> ${correctas}</p>
-            <p><strong>Incorrectas:</strong> ${incorrectas}</p>
-            <p><strong>Acierto:</strong> ${porcentaje}%</p>
-            <p><strong>Tiempo promedio:</strong> ${promedioTiempo}s</p>
-            <button onclick="reiniciarJuego()">Nuevo juego</button>
-            <button onclick="cambiarConfiguracion()">Cambiar configuración</button>
-            <button onclick="finalizarJuego()">Finalizar</button>
+            <p><strong>Player:</strong> ${nombreJugador}</p>
+            <p><strong>Total Score:</strong> ${puntaje}</p>
+            <p><strong>Correct:</strong> ${correctas}</p>
+            <p><strong>Incorrect:</strong> ${incorrectas}</p>
+            <p><strong>Accuracy:</strong> ${porcentaje}%</p>
+            <p><strong>Average Time:</strong> ${promedioTiempo}s</p>
+            <button onclick="reiniciarJuego()">New Game</button>
+            <button onclick="cambiarConfiguracion()">Change Settings</button>
+            <button onclick="finalizarJuego()">Finish</button>
         </div>
     `;
 }
@@ -243,8 +255,8 @@ function reiniciarJuego() {
             mostrarPreguntas(data.results);
         })
         .catch(error => {
-            console.error('Error reiniciando el juego:', error);
-            alert("No se pudo reiniciar el juego. Intenta nuevamente.");
+            console.error('Error reloading the game:', error);
+            alert("Could not reload the game. Please try again.");
         })
         .finally(() => {
             ocultarLoader();
@@ -261,7 +273,7 @@ function cambiarConfiguracion() {
 function finalizarJuego() {
     document.body.innerHTML = `
         <div class="Despedida">
-            ¡Gracias por jugar!
+            ¡Thanks for playing!
         </div>
     `;
 }
